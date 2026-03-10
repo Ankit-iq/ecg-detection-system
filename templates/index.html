@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI ECG Diagnostic System</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body class="bg-slate-950 text-white min-h-screen">
+
+<div class="max-w-7xl mx-auto p-8">
+
+<h1 class="text-4xl font-bold text-cyan-400 mb-8">
+AI ECG Arrhythmia Detection System With DWT and FWT
+</h1>
+
+<div class="grid md:grid-cols-2 gap-8">
+
+<!-- INPUT PANEL -->
+
+<div class="bg-slate-900 p-6 rounded-xl border border-cyan-500/30">
+
+<h2 class="text-xl text-cyan-300 mb-4">ECG Input</h2>
+
+<form method="POST">
+
+<textarea
+id="ecgInput"
+name="ecg"
+placeholder="Paste ECG values separated by commas"
+class="w-full h-36 p-3 rounded text-black"
+></textarea>
+
+<div class="flex gap-4 mt-4">
+
+<button
+type="button"
+onclick="visualizeECG()"
+class="bg-blue-500 px-6 py-2 rounded hover:bg-blue-600"
+>
+Visualize
+</button>
+
+<button
+type="submit"
+class="bg-green-500 px-6 py-2 rounded hover:bg-green-600"
+>
+Run AI Diagnosis
+</button>
+
+</div>
+
+</form>
+
+<!-- EXAMPLE SIGNALS -->
+
+<div class="mt-6">
+
+<p class="text-gray-400 mb-2">Quick examples</p>
+
+<button onclick="loadNormal()" class="bg-emerald-600 px-4 py-2 rounded mr-2">
+Normal ECG
+</button>
+
+<button onclick="loadAbnormal()" class="bg-red-600 px-4 py-2 rounded">
+Arrhythmia ECG
+</button>
+
+</div>
+
+<!-- FILE UPLOAD -->
+
+<div class="mt-6">
+
+<p class="text-gray-400 mb-2">Upload ECG CSV</p>
+
+<input type="file" id="fileInput" class="text-white" />
+
+</div>
+
+</div>
+
+
+<!-- RESULT PANEL -->
+
+<div class="bg-slate-900 p-6 rounded-xl border border-purple-500/30">
+
+<h2 class="text-xl text-purple-300 mb-4">Diagnosis Result</h2>
+
+{% if prediction %}
+
+<div class="bg-slate-800 p-6 rounded-lg text-center">
+
+<p class="text-3xl text-green-400 font-bold">
+{{ prediction }}
+</p>
+
+{% if confidence %}
+<p class="text-gray-400 mt-2">
+Confidence: {{ confidence }}%
+</p>
+{% endif %}
+
+</div>
+
+{% else %}
+
+<p class="text-gray-400">Prediction will appear here</p>
+
+{% endif %}
+
+</div>
+
+</div>
+
+
+<!-- SIGNAL STATS -->
+
+<div class="grid md:grid-cols-3 gap-6 mt-8">
+
+<div class="bg-slate-900 p-4 rounded-lg text-center">
+<p class="text-gray-400">Signal Length</p>
+<p id="signalLength" class="text-xl text-cyan-400">0</p>
+</div>
+
+<div class="bg-slate-900 p-4 rounded-lg text-center">
+<p class="text-gray-400">Max Value</p>
+<p id="maxVal" class="text-xl text-cyan-400">0</p>
+</div>
+
+<div class="bg-slate-900 p-4 rounded-lg text-center">
+<p class="text-gray-400">Min Value</p>
+<p id="minVal" class="text-xl text-cyan-400">0</p>
+</div>
+
+</div>
+
+
+<!-- ECG GRAPH -->
+
+<div class="mt-10 bg-slate-900 p-6 rounded-xl">
+
+<h2 class="text-xl text-red-300 mb-4">ECG Waveform</h2>
+
+<canvas id="ecgChart"></canvas>
+
+</div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
